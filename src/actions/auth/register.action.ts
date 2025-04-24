@@ -6,7 +6,7 @@ import {
   updateProfile,
   type AuthError,
 } from "firebase/auth";
-import { firebase } from "src/firebase/config";
+import { firebase } from "src/prodfirebase/config";
 
 export const registerUser = defineAction({
   accept: "form",

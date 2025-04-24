@@ -2,7 +2,7 @@ import { defineAction } from "astro:actions";
 import { z } from "astro:schema";
 import type { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { firebase } from "src/firebase/config";
+import { firebase } from "src/prodfirebase/config";
 
 export const loginUser = defineAction({
   accept: "form",

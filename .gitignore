@@ -13,7 +13,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Ignore Firebase config file
-src/firebase/config.ts
+src/prodfirebase/config.ts
 
 # environment variables
 .env
