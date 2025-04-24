@@ -62,9 +62,19 @@ const remember_me = !!email;
           <button
             id="btnSubmit"
             type="submit"
-            class="disabled:bg-gray-300 w-full flex justify-center bg-green-400 hover:bg-green-500 text-gray-100 p-3 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 focus:bg-gray-300"
+            class="disableBtn disabled:bg-gray-300 w-full flex justify-center bg-green-400 hover:bg-green-500 text-gray-100 p-3 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 focus:bg-gray-300"
           >
             Log in
+          </button>
+          <div class="flex flex-1 w-full my-3">
+            <div class="w-full border-t-2 border-gray-500"></div>
+          </div>
+          <button
+            id="btn-google"
+            type="button"
+            class="disabled:bg-gray-300 w-full flex justify-center bg-red-500 hover:bg-red-700 text-gray-100 p-3 rounded-full tracking-wide font-semibold shadow-lg transition ease-in duration-500 cursor-crosshair"
+          >
+            Log in with Google
           </button>
         </div>
       </form>
@@ -84,12 +94,22 @@ const remember_me = !!email;
   </div>
 </AuthLayout>
 
+<style>
+  @reference 'tailwindcss';
+  .disableBtn:disabled {
+    @apply bg-gray-400 cursor-default;
+  }
+</style>
+
 <script>
   import { actions } from "astro:actions";
+  import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+  import { firebase } from "src/firebase/config";
   import Swal from "sweetalert2";
 
   const form = document.querySelector("form") as HTMLFormElement;
   const submitBtn = document.querySelector("#btnSubmit") as HTMLButtonElement;
+  const googleBtn = document.querySelector("#btn-google") as HTMLButtonElement;
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -109,5 +129,29 @@ const remember_me = !!email;
       return;
     }
     window.location.replace("/protected");
+  });
+
+  googleBtn.addEventListener("click", async () => {
+    googleBtn.setAttribute("disabled", "disabled");
+    const provider = new GoogleAuthProvider();
+
+    try {
+      //First step: Get credentials from user side
+      const credentials = await signInWithPopup(firebase.auth, provider);
+
+      //Second step: Verify the credentials in the backend.
+      const { error } = await actions.loginWithGoogle(credentials);
+      if (error) {
+        alert(error.message);
+        googleBtn.removeAttribute("disabled");
+        return;
+      }
+
+      googleBtn.innerText = "Redirecting...";
+      window.location.replace("/protected");
+    } catch (error) {
+      console.log(error);
+      googleBtn.removeAttribute("disabled");
+    }
   });
 </script>

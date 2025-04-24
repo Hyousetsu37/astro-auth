@@ -1,5 +1,5 @@
 ---
-
+const { isLoggedIn } = Astro.locals;
 ---
 
 <!-- component -->
@@ -10,15 +10,21 @@
       <li class="font-semibold text-gray-700">
         <a href="/">Home</a>
       </li>
-      <li class="font-semibold text-gray-700">
+      
+      {
+        !isLoggedIn ? (
+          <li class="font-semibold text-gray-700">
+            <a href="/login">Login</a>
+          </li>
+        ) : (
+        <li class="font-semibold text-gray-700">
         <a href="/protected">Protected</a>
       </li>
-      <li class="font-semibold text-gray-700">
-        <a href="/login">Login</a>
-      </li>
-      <li id="logout" class="font-semibold text-gray-700">
-        <a href="#">Logout</a>
-      </li>
+          <li id="logout" class="font-semibold text-gray-700">
+            <a href="#">Logout</a>
+          </li>
+        )
+      }
       <li>
         <svg
           xmlns="http://www.w3.org/2000/svg"
