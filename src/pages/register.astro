@@ -63,7 +63,7 @@ const rememberMe = !!email;
             </label>
           </div>
           <div class="text-sm">
-            <a href="/login" class="text-green-400 hover:text-green-500">
+            <a href="/login" class="ml-2 text-green-400 hover:text-green-500">
               Already have an account? Login
             </a>
           </div>
@@ -96,6 +96,7 @@ const rememberMe = !!email;
 
 <script>
   import { actions } from "astro:actions";
+  import Swal from "sweetalert2";
 
   const form = document.querySelector("form") as HTMLFormElement;
   const btnSubmit = document.querySelector("#btn-submit") as HTMLButtonElement;
@@ -104,12 +105,18 @@ const rememberMe = !!email;
     btnSubmit.setAttribute("disabled", "disabled");
 
     const formData = new FormData(form);
-    const { error } = await actions.registerUser(formData as any);
+    const { data, error } = await actions.registerUser(formData as any);
+    console.log(data);
 
     if (error) {
-      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Credenciales no son correctas",
+        text: error.message,
+      });
+      btnSubmit.removeAttribute("disabled");
+      return;
     }
-
-    btnSubmit.removeAttribute("disabled");
+    window.location.replace("/protected");
   });
 </script>
