@@ -1,7 +1,7 @@
 ---
 import Navbar from "@components/shared/Navbar.astro";
 import MainLayout from "@layouts/MainLayout.astro";
-import { firebase } from "src/prodfirebase/config";
+import { firebase } from "src/firebase/config";
 
 const firebaseUser = firebase.auth.currentUser;
 if (firebaseUser === null) {
