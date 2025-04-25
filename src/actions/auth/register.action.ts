@@ -48,7 +48,7 @@ export const registerUser = defineAction({
 
       //verify Email
       await sendEmailVerification(currentUser, {
-        url: "http://localhost:4321/protected",
+        url: `${import.meta.env.WEBSITE_URL}protected`,
       });
 
       return { uid: user.user.uid, email: user.user.email };

@@ -3,13 +3,25 @@ import Navbar from "@components/shared/Navbar.astro";
 import MainLayout from "@layouts/MainLayout.astro";
 import { firebase } from "src/firebase/config";
 
-const firebaseUser = firebase.auth.currentUser;
-if (firebaseUser === null) {
-  return Astro.redirect("/login");
+const { user, isLoggedIn } = Astro.locals;
+
+// if (!isLoggedIn || !user) {
+//   return Astro.redirect("/login");
+// }
+
+if (!user) {
+  return;
 }
 
-const { displayName, emailVerified, email, photoURL } = firebaseUser;
-const name = displayName ?? "No Name";
+const { avatar: photoURL, name, email, emailVerified } = user;
+
+// const firebaseUser = firebase.auth.currentUser;
+// if (firebaseUser === null) {
+//   return Astro.redirect("/login");
+// }
+
+// const { displayName, emailVerified, email, photoURL } = firebaseUser;
+// const name = displayName ?? "No Name";
 ---
 
 <MainLayout>
@@ -23,7 +35,7 @@ const name = displayName ?? "No Name";
           <img
             class="w-32 mx-auto rounded-full -mt-20 border-8 border-white"
             src={photoURL}
-            alt={`Avatar of ${displayName}`}
+            alt={`Avatar of ${name}`}
           />
         ) : (
           <div class="w-32 h-32 mx-auto rounded-full -mt-20 border-8 border-white bg-gray-300 flex justify-center items-center">
