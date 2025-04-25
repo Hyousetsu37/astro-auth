@@ -1,6 +1,7 @@
 ---
 import Navbar from "@components/shared/Navbar.astro";
 import MainLayout from "@layouts/MainLayout.astro";
+import type { User } from "firebase/auth";
 import { firebase } from "src/firebase/config";
 
 const { user, isLoggedIn } = Astro.locals;
@@ -13,8 +14,14 @@ if (!user) {
   return;
 }
 
-const { avatar: photoURL, name, email, emailVerified } = user;
+const { avatar: photoURL, name, email } = user;
+const firebaseUser = firebase.auth.currentUser;
 
+if (!firebaseUser) {
+  return;
+}
+await firebaseUser?.reload();
+const { emailVerified } = firebaseUser;
 // const firebaseUser = firebase.auth.currentUser;
 // if (firebaseUser === null) {
 //   return Astro.redirect("/login");
